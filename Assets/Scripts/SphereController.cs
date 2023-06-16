@@ -2,59 +2,44 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Events;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class SphereController : MonoBehaviour
+public class SphereController : FigureBehaviour
 {
     [SerializeField] private GameObject _spherePrefab;
 
     [SerializeField] private GameObject _plane;
 
-    [SerializeField] private List<Color> _colors = new();
 
+    [SerializeField] private ProviderColor _providerColor;
 
     private GameObject _sphere;
+   
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        Instance();
-    }
-
-    public void Instance()
-    {
-        var positionX = GetPoint();
-        var positionY = GetPoint();
-
-        _sphere = Instantiate(_spherePrefab);
-        _sphere.transform.SetParent(_plane.transform);
-        _sphere.transform.localPosition = new Vector3(positionX, 0.5f, positionY);
-        _sphere.GetComponent<MeshRenderer>().material.color = GetColor();
+        TriggerBehaviour.InstantiateObject += SetUpObject;
+        CollisionOnStart.InstantiateSphere += SetUpObject;
        
     }
 
-    private Color GetColor()
+    public void SetUpObject()
     {
-        var number = Random.Range(0, 3);
-        var color = _colors[number];
-        return color;
+        _sphere = FigureBehaviour.Initialize(_spherePrefab, _plane);
+        _sphere.transform.localPosition = FigureBehaviour.ObjectSetPosition();
+        _sphere.GetComponent<MeshRenderer>().material.color = _providerColor.GetColor();
     }
 
-    private float GetPoint()
+
+    private void OnDestroy()
     {
-        var point = Random.Range(-4.0f, 4.0f);
-        return point;
+        TriggerBehaviour.InstantiateObject -= SetUpObject;
+        CollisionOnStart.InstantiateSphere -= SetUpObject;
+       
     }
 
-    private void OnTriggerEnter(Collider other)
-        {
-            if (other.CompareTag("Player"))
-            {
-                other.gameObject.GetComponent<MeshRenderer>().material.color =
-                    _sphere.GetComponent<MeshRenderer>().material.color;
-                Destroy(_sphere);
-                Instance();
-            }
-        }
-    
+   
 }

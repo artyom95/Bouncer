@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -7,8 +8,17 @@ public class GameController : MonoBehaviour
     [SerializeField] private CubeController _cubeController;
     
     [SerializeField] private MousePointProvider _mousePointProvider;
+    [SerializeField] private CylinderController _cylinderController;
+    [SerializeField] private SphereController _sphereController;
     private Vector3 _placeforClick;
 
+
+    private void Start()
+    {
+        _cubeController.SetUpObject();
+        _cylinderController.AccomodateCylinder();
+        _sphereController.SetUpObject();
+    }
 
     // Update is called once per frame
     void Update()
@@ -23,6 +33,6 @@ public class GameController : MonoBehaviour
             }
         }
 
-        _cubeController.CheckPosition();
+      //  _cubeController.CheckPosition();
     }
 }

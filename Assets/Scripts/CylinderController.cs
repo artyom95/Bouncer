@@ -2,65 +2,51 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Random = UnityEngine.Random;
 
-public class CylinderController : MonoBehaviour
+public class CylinderController : FigureBehaviour
 {
-    
-    [SerializeField] 
-    private GameObject _cylinderPrefab;
+    [SerializeField] private GameObject _cylinderPrefab;
 
-    [SerializeField] 
-    private GameObject _plane;
+    [SerializeField] private GameObject _plane;
 
-    [SerializeField] 
-    private List<Color> _colors = new ();
+    [SerializeField] private ProviderColor _providerColor;
+    [SerializeField] private CollisionOnStart _collisionOnStart;
 
-  //  [SerializeField] private CubeController _cubeController;    // убрать
     private int _amountCylinder = 6;
 
     private GameObject _cylinder;
+ 
+
+    private void Start()
+    {
+        CollisionOnStart.InstantiateCylinder += SetUpObject;
+        
+    }
 
     // Start is called before the first frame update
-    void Start()
+    public void AccomodateCylinder()
     {
         for (int i = 0; i < _amountCylinder; i++)
         {
-            Instance();
+            SetUpObject();
         }
     }
 
-    private void Instance()
+    private void SetUpObject()
     {
-        var positionX = GetPoint();
-        var positionY = GetPoint();
-
-        _cylinder = Instantiate(_cylinderPrefab);
-        _cylinder.transform.SetParent(_plane.transform);
-        _cylinder.transform.localPosition = new Vector3(positionX, 0.5f, positionY);
-        _cylinder.GetComponent<MeshRenderer>().material.color = GetColor();
+        _cylinder = FigureBehaviour.Initialize(_cylinderPrefab, _plane);
+       
+        _cylinder.transform.localPosition = FigureBehaviour.ObjectSetPosition();
+        _cylinder.GetComponent<MeshRenderer>().material.color = _providerColor.GetColor();
     }
 
-    private Color GetColor()
+    private void OnDestroy()
     {
-        var number = Random.Range(0, 3);
-        var color = _colors[number];
-        return color;
-    }
-    private float GetPoint()
-    {
-        var point = Random.Range(-4.0f, 4.0f);
-        return point;
+        CollisionOnStart.InstantiateCylinder -= SetUpObject;
+       
     }
 
-    private void OnCollisionEnter(Collision collision)
-    {
-        if (collision.collider.CompareTag("Player"))
-        {
-            if (collision.collider.gameObject.GetComponent<MeshRenderer>().material.color ==  _cylinder.GetComponent<MeshRenderer>().material.color )
-            {
-                Destroy(_cylinder);
-            }
-        }
-    }
+   
 }

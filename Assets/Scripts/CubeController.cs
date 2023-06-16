@@ -1,63 +1,72 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Serialization;
 
-public class CubeController : MonoBehaviour
+
+public class CubeController : FigureBehaviour
 {
-    [SerializeField] 
-    private GameObject _plane;
+    [SerializeField] private GameObject _plane;
 
-    [SerializeField]
-    private GameObject _prefabCube;
-
+    [SerializeField] private GameObject _prefabCube;
+    
    
-
     private GameObject _cube;
     private Rigidbody _cubeRigidBody;
-    public Color _color;    // сделать синглтон;
+    private static Color _currentColor; // сделать синглтон;
     const float Force = 250f;
 
-    private const float LineBorder = 9.5f;
+    //  private const float LineBorder = 9.5f;
 
     // Start is called before the first frame update
-    void Start()
+
+    private void Start()
     {
-        InstanceCube();
+        ColliderBorderBehaviour.OffSiteCube += SetUpObject;
+        ColliderBorderBehaviour.SetColor += SaveCurrentColor;
+      
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-    }
 
-    private void InstanceCube()
+    public void SetUpObject()
     {
-        _cube = Instantiate(_prefabCube);
-        _cube.transform.SetParent(_plane.transform);
-        _cube.transform.localPosition = new Vector3(0f, 0.5f, 0f);
+        _cube = FigureBehaviour.Initialize(_prefabCube, _plane);
+
+        _cube.transform.localPosition = FigureBehaviour.ObjectSetCentrePosition();
+
         _cubeRigidBody = _cube.GetComponent<Rigidbody>();
-        _color = _cube.GetComponent<MeshRenderer>().material.color;
-        
+        SetColor();
     }
 
-    public void CheckPosition()
+    private void SetColor()
     {
-        if (_cube != null)
+        if (_currentColor != default)
         {
-            if (_cube.transform.position.x > LineBorder || _cube.transform.position.x < -LineBorder ||
-                _cube.transform.position.z > LineBorder || _cube.transform.position.z < -LineBorder)
-            {
-                Destroy(_cube);
-                InstanceCube();
-            }
+            _cube.GetComponent<MeshRenderer>().material.color = _currentColor;
         }
+        else
+        {
+            _cube.GetComponent<MeshRenderer>().material.color = Color.white;
+        }
+    }
+
+    private void SaveCurrentColor()
+    {
+        _currentColor = _cube.GetComponent<MeshRenderer>().material.color;
     }
 
     public void MoveCube(Vector3 mousePoint)
     {
-        _cubeRigidBody.AddForce((mousePoint - _cube.transform.position).normalized * Force, ForceMode.Force);
+        _cubeRigidBody.AddForce((mousePoint - _cube.transform.position).normalized * Force);
     }
+
+    private void OnDestroy()
+    {
+        ColliderBorderBehaviour.OffSiteCube -= SetUpObject;
+      
+    }
+
+
     
-  
 }
