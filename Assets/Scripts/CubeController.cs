@@ -23,13 +23,13 @@ public class CubeController : FigureBehaviour
 
     private void Start()
     {
-        ColliderBorderBehaviour.OffSiteCube += SetUpObject;
+        ColliderBorderBehaviour.OffSiteCube += SpawnCube;
         ColliderBorderBehaviour.SetColor += SaveCurrentColor;
       
     }
 
 
-    public void SetUpObject()
+    public void SpawnCube()
     {
         _cube = FigureBehaviour.Initialize(_prefabCube, _plane);
 
@@ -63,7 +63,7 @@ public class CubeController : FigureBehaviour
 
     private void OnDestroy()
     {
-        ColliderBorderBehaviour.OffSiteCube -= SetUpObject;
+        ColliderBorderBehaviour.OffSiteCube -= SpawnCube;
       
     }
 

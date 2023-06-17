@@ -21,12 +21,12 @@ public class SphereController : FigureBehaviour
     // Start is called before the first frame update
     private void Start()
     {
-        TriggerBehaviour.InstantiateObject += SetUpObject;
-        CollisionOnStart.InstantiateSphere += SetUpObject;
+        TriggerBehaviour.InstantiateObject += SpawnSphere;
+        CylinderOnStartCollision.InstantiateSphere += SpawnSphere;
        
     }
 
-    public void SetUpObject()
+    public void SpawnSphere()
     {
         _sphere = FigureBehaviour.Initialize(_spherePrefab, _plane);
         _sphere.transform.localPosition = FigureBehaviour.ObjectSetPosition();
@@ -36,8 +36,8 @@ public class SphereController : FigureBehaviour
 
     private void OnDestroy()
     {
-        TriggerBehaviour.InstantiateObject -= SetUpObject;
-        CollisionOnStart.InstantiateSphere -= SetUpObject;
+        TriggerBehaviour.InstantiateObject -= SpawnSphere;
+        CylinderOnStartCollision.InstantiateSphere -= SpawnSphere;
        
     }
 

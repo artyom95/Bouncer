@@ -9,15 +9,16 @@ public class GameController : MonoBehaviour
     
     [SerializeField] private MousePointProvider _mousePointProvider;
     [SerializeField] private CylinderController _cylinderController;
-    [SerializeField] private SphereController _sphereController;
+    [SerializeField] private SphereController _sphereController; 
     private Vector3 _placeforClick;
 
 
     private void Start()
     {
-        _cubeController.SetUpObject();
-        _cylinderController.AccomodateCylinder();
-        _sphereController.SetUpObject();
+        _cubeController.SpawnCube();
+         _sphereController.SpawnSphere();
+         _cylinderController.AccomodateCylinder();
+
     }
 
     // Update is called once per frame

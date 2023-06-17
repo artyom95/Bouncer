@@ -8,7 +8,7 @@ public class ProviderColor : MonoBehaviour
 
     public Color GetColor()
     {
-        var number = Random.Range(0, 3);
+        var number = Random.Range(0, _colors.Count);
         var color = _colors[number];
         return color;
     }
