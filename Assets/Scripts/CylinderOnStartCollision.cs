@@ -9,7 +9,7 @@ public class CylinderOnStartCollision : MonoBehaviour
 {
     [SerializeField] private List<GameObject> _gameObjects = new List<GameObject>();
    // public static Action InstatiateCube;
-    public static Action InstantiateCylinder;
+   // public static Action InstantiateCylinder;
   //  public static Action InstantiateSphere;
 
 
@@ -34,7 +34,7 @@ public class CylinderOnStartCollision : MonoBehaviour
 
             Debug.Log(gameObject.transform.localPosition.z);
 
-            InstantiateCylinder?.Invoke();
+          //  InstantiateCylinder?.Invoke();
         }
     }
 

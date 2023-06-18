@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class ProviderColor : MonoBehaviour
 {
-    [SerializeField] private List<Color> _colors = new();
+    [SerializeField]
+    private List<Color> _colors = new();
 
     public Color GetColor()
     {

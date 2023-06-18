@@ -8,12 +8,15 @@ using Random = UnityEngine.Random;
 
 public class SphereController : FigureBehaviour
 {
-    [SerializeField] private GameObject _spherePrefab;
+    [SerializeField]
+    private GameObject _spherePrefab;
 
-    [SerializeField] private GameObject _plane;
+    [SerializeField]
+    private GameObject _plane;
 
 
-    [SerializeField] private ProviderColor _providerColor;
+    [SerializeField]
+    private ProviderColor _providerColor;
 
     private GameObject _sphere;
    
@@ -22,7 +25,7 @@ public class SphereController : FigureBehaviour
     private void Start()
     {
         TriggerBehaviour.InstantiateObject += SpawnSphere;
-        CylinderOnStartCollision.InstantiateSphere += SpawnSphere;
+     //   CylinderOnStartCollision.InstantiateSphere += SpawnSphere;
        
     }
 
@@ -37,7 +40,7 @@ public class SphereController : FigureBehaviour
     private void OnDestroy()
     {
         TriggerBehaviour.InstantiateObject -= SpawnSphere;
-        CylinderOnStartCollision.InstantiateSphere -= SpawnSphere;
+    //    CylinderOnStartCollision.InstantiateSphere -= SpawnSphere;
        
     }
 

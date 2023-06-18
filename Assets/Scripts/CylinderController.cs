@@ -7,21 +7,26 @@ using Random = UnityEngine.Random;
 
 public class CylinderController : FigureBehaviour
 {
-    [SerializeField] private GameObject _cylinderPrefab;
-
-    [SerializeField] private GameObject _plane;
-
-    [SerializeField] private ProviderColor _providerColor;
-    [SerializeField] private CylinderOnStartCollision _collisionOnStart;
+    [SerializeField] 
+    private GameObject _cylinderPrefab;
+    [SerializeField] 
+    private GameObject _plane;
+    [SerializeField] 
+    private ProviderColor _providerColor;
+    [SerializeField] 
+    private CountManager _countManager;
+    [SerializeField]
+    private CylinderOnStartCollision _collisionOnStart;
 
     private int _amountCylinder = 6;
-
     private GameObject _cylinder;
+    private Color _currentColorCylinder;
     //  public static Action <GameObject> CheckCollisionCylinder;
 
     private void Start()
     {
-        CylinderOnStartCollision.InstantiateCylinder += SpawnCylinder;
+       
+        //   CylinderOnStartCollision.InstantiateCylinder += SpawnCylinder;
     }
 
     // Start is called before the first frame update
@@ -40,12 +45,33 @@ public class CylinderController : FigureBehaviour
         _cylinder.transform.localPosition = FigureBehaviour.ObjectSetPosition();
 
         // CheckCollisionCylinder?.Invoke(_cylinder);
-        _cylinder.GetComponent<MeshRenderer>().material.color = _providerColor.GetColor();
+        _currentColorCylinder = _providerColor.GetColor();
+        _cylinder.GetComponent<MeshRenderer>().material.color = _currentColorCylinder;
+        CheckCylinderToColor();
     }
 
+    private void CheckCylinderToColor()
+    {
+        if (_currentColorCylinder == Color.green)
+        {
+            _countManager.SetAmountColorCylinder("green", "increase");
+            return;
+        }
+
+        if (_currentColorCylinder == Color.red)
+        {
+            _countManager.SetAmountColorCylinder("red", "increase");
+            return;
+        }
+
+        if (_currentColorCylinder.Equals(Color.yellow))
+        {
+            _countManager.SetAmountColorCylinder("yellow", "increase");
+        }
+    }
 
     private void OnDestroy()
     {
-        CylinderOnStartCollision.InstantiateCylinder -= SpawnCylinder;
+        //   CylinderOnStartCollision.InstantiateCylinder -= SpawnCylinder;
     }
 }

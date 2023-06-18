@@ -8,7 +8,6 @@ public class TriggerBehaviour : MonoBehaviour
 {
     public static Action InstantiateObject;
 
-
     private void OnTriggerEnter(Collider other)
     {
         if (gameObject.CompareTag(GlobalConstant.SPHERE_TAG) && other.CompareTag(GlobalConstant.PLAYER_TAG))
@@ -20,9 +19,6 @@ public class TriggerBehaviour : MonoBehaviour
         }
         
     }
-
-   
-
     // Start is called before the first frame update
     void Start()
     {

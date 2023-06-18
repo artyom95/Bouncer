@@ -3,14 +3,22 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
+public delegate void DecreaseAmountCylinder(string s1, string s);
+
 public class CollisionCylinderBehaviour : MonoBehaviour
 {
+    private Color _currentColorCylinder;
+    public static event DecreaseAmountCylinder decreaseAmuountCylinder;
+
     private void OnCollisionEnter(Collision collision)
     {
-        if (gameObject.CompareTag(GlobalConstant.CYLINDER_TAG) && collision.gameObject.CompareTag(GlobalConstant.PLAYER_TAG))
+        _currentColorCylinder = gameObject.GetComponent<MeshRenderer>().material.color;
+        if (gameObject.CompareTag(GlobalConstant.CYLINDER_TAG) &&
+            collision.gameObject.CompareTag(GlobalConstant.PLAYER_TAG))
         {
             if (AreColorEquals(collision.gameObject))
             {
+                CheckCylinderToColor();
                 Destroy(this.gameObject);
             }
         }
@@ -18,7 +26,7 @@ public class CollisionCylinderBehaviour : MonoBehaviour
 
     private bool AreColorEquals(GameObject cube)
     {
-        if (gameObject.GetComponent<MeshRenderer>().material.color == cube.GetComponent<MeshRenderer>().material.color)
+        if (_currentColorCylinder == cube.GetComponent<MeshRenderer>().material.color)
         {
             return true;
         }
@@ -28,13 +36,25 @@ public class CollisionCylinderBehaviour : MonoBehaviour
         }
     }
 
-    // Start is called before the first frame update
-    void Start()
+    private void CheckCylinderToColor()
     {
-    }
+        if (_currentColorCylinder == Color.green)
+        {
+            decreaseAmuountCylinder?.Invoke("green", "decrease");
 
-    // Update is called once per frame
-    void Update()
-    {
+            return;
+        }
+
+        if (_currentColorCylinder == Color.red)
+        {
+            decreaseAmuountCylinder?.Invoke("red", "decrease");
+
+            return;
+        }
+
+        if (_currentColorCylinder.Equals(Color.yellow))
+        {
+            decreaseAmuountCylinder?.Invoke("yellow", "decrease");
+        }
     }
 }

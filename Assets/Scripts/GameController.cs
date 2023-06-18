@@ -6,19 +6,18 @@ using UnityEngine;
 public class GameController : MonoBehaviour
 {
     [SerializeField] private CubeController _cubeController;
-    
+
     [SerializeField] private MousePointProvider _mousePointProvider;
     [SerializeField] private CylinderController _cylinderController;
-    [SerializeField] private SphereController _sphereController; 
-    private Vector3 _placeforClick;
+    [SerializeField] private SphereController _sphereController;
+    [SerializeField] private CountManager _countManager;
 
 
     private void Start()
     {
         _cubeController.SpawnCube();
-         _sphereController.SpawnSphere();
-         _cylinderController.AccomodateCylinder();
-
+        _sphereController.SpawnSphere();
+        _cylinderController.AccomodateCylinder();
     }
 
     // Update is called once per frame
@@ -31,9 +30,10 @@ public class GameController : MonoBehaviour
             {
                 var positionMousePoint = _mousePointProvider.GetMouseCoordinates(hitInfo.point);
                 _cubeController.MoveCube(positionMousePoint);
+                _countManager.IncreaseAmountMouseClicks();
             }
         }
 
-      //  _cubeController.CheckPosition();
+        //  _cubeController.CheckPosition();
     }
 }
